@@ -23,6 +23,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.therealbluepandabear.pixapencil.R
 import kotlin.random.Random
@@ -97,12 +98,21 @@ class EasterEggView @JvmOverloads constructor(
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
+            performClick()
             handler.removeCallbacks(handlerRunnable)
 
             randomizeHue()
             initCirclePaint()
             invalidate()
         }
+
+        return true
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+
+        Toast.makeText(this.context, this.context.getString(R.string.fragmentEasterEgg_toast_text), Toast.LENGTH_LONG).show()
 
         return true
     }
