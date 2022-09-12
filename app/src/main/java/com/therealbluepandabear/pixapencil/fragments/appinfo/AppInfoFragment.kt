@@ -19,26 +19,43 @@
 package com.therealbluepandabear.pixapencil.fragments.appinfo
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.method.LinkMovementMethod
 import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.therealbluepandabear.pixapencil.BuildConfig
 import com.therealbluepandabear.pixapencil.R
 import com.therealbluepandabear.pixapencil.databinding.FragmentAppInfoBinding
+import com.therealbluepandabear.pixapencil.fragments.easteregg.EasterEggFragment
+
 
 class AppInfoFragment : Fragment() {
     private var _binding: FragmentAppInfoBinding? = null
 
-    private var logoTapCount = 0
-
     val binding get(): FragmentAppInfoBinding {
         return _binding!!
     }
+
+    private var logoTapCount = 0
+    private var timerRunning = false
+
+    private val easterEggTimerTask = object : CountDownTimer(2000, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            timerRunning = true
+        }
+
+        override fun onFinish() {
+            timerRunning = false
+            logoTapCount = 0
+        }
+    }
+
 
     private fun setup() {
         activity?.findViewById<BottomNavigationView>(R.id.activityMain_bottomNavigationView)?.visibility = View.GONE
@@ -49,10 +66,17 @@ class AppInfoFragment : Fragment() {
         binding.fragmentAppInfoAboutText.movementMethod = LinkMovementMethod.getInstance()
 
         binding.imageView.setOnClickListener {
+            if (!timerRunning) {
+                easterEggTimerTask.start()
+            }
+
             logoTapCount++
 
-            if (logoTapCount == 5) {
-                logoTapCount = 0
+            if (logoTapCount == 5 && timerRunning) {
+                childFragmentManager.commit {
+                    replace(R.id.fragmentAppInfo_primaryFragmentHost, EasterEggFragment.newInstance())
+                    addToBackStack(null)
+                }
             }
         }
     }
