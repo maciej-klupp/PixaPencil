@@ -24,7 +24,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.therealbluepandabear.pixapencil.R
 import com.therealbluepandabear.pixapencil.databinding.FragmentEasterEggBinding
 
 class EasterEggFragment : Fragment() {
@@ -43,7 +43,7 @@ class EasterEggFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentEasterEggBinding.inflate(inflater, container, false)
 
-        Toast.makeText(this.requireContext(), "Congratulations, you have found the easter egg!", Toast.LENGTH_LONG).show()
+        Toast.makeText(this.requireContext(), getString(R.string.fragmentEasterEgg_toast_text), Toast.LENGTH_LONG).show()
 
         return binding.root
     }

@@ -115,6 +115,8 @@
     </string>
     <string name="fragmentAppInfo_description_text_land">PixaPencil is an <a href="https://github.com/therealbluepandabear/PixaPencil">open source</a> pixel art editor, 100% free of privacy-intrusive Google Play services and annoying advertisements. \n\nTo ensure this, it is recommended you\ninstall the app via <a href="https://f-droid.org/en/packages/com.therealbluepandabear.pixapencil/">F-Droid</a> or <a href="https://github.com/therealbluepandabear/PixaPencil/releases/latest">GitHub</a>.</string>
 
+    <string name="fragmentEasterEgg_toast_text">🥚 You have found the easter egg!\nTap to change hue.</string>
+
     <!-- Activity strings -->
     <string name="activityMain_newProjectButton_contentDescription">New Project</string>
     <string name="activityCanvas_tab_brushes">Brushes</string>
