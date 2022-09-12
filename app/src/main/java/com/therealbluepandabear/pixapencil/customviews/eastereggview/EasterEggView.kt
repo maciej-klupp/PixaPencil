@@ -41,8 +41,8 @@ class EasterEggView @JvmOverloads constructor(
     private val handlerRunnable = Runnable {
         invalidate()
     }
-
     private val circlePaint = Paint()
+    private val textPaint = Paint()
     private val bitmapRatio = 70
 
     private fun initPixelsArr() {
@@ -58,17 +58,18 @@ class EasterEggView @JvmOverloads constructor(
         circlePaint.style = Paint.Style.FILL
     }
 
+    private fun initTextPaint() {
+        textPaint.textAlign = Paint.Align.CENTER
+        textPaint.textSize = 180f
+        textPaint.color = Color.WHITE
+        textPaint.typeface = ResourcesCompat.getFont(this.context, R.font.manrope_medium)
+    }
+
     private fun randomizeHue() {
         hue = Random.nextInt(0, 361)
     }
 
     private fun drawText(canvas: Canvas) {
-        val textPaint = Paint()
-        textPaint.textAlign = Paint.Align.CENTER
-        textPaint.textSize = 180f
-        textPaint.color = Color.WHITE
-        textPaint.typeface = ResourcesCompat.getFont(this.context, R.font.manrope_medium)
-
         val x = measuredWidth / 2
         val y = (measuredHeight / 2 - (textPaint.descent() + textPaint.ascent()) / 2)
 
@@ -91,6 +92,7 @@ class EasterEggView @JvmOverloads constructor(
 
         initPixelsArr()
         initCirclePaint()
+        initTextPaint()
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
