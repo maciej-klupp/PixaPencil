@@ -88,7 +88,7 @@ class EasterEggView @JvmOverloads constructor(
 
         val dimensions = getBitmapDimens()
 
-        easterEggViewBitmap = Bitmap.createBitmap(dimensions.first, dimensions.second, Bitmap.Config.ARGB_8888)
+        easterEggViewBitmap = Bitmap.createBitmap(dimensions.first, dimensions.second, Bitmap.Config.RGB_565)
         boundingRect = Rect(0, 0, measuredWidth, measuredHeight)
 
         initPixelsArr()
@@ -128,7 +128,7 @@ class EasterEggView @JvmOverloads constructor(
                 pixelsArr[i] = Color.HSVToColor(hsvArr)
             }
 
-            easterEggViewBitmap = Bitmap.createBitmap(pixelsArr, easterEggViewBitmap.width, easterEggViewBitmap.height, Bitmap.Config.ARGB_8888)
+            easterEggViewBitmap = Bitmap.createBitmap(pixelsArr, easterEggViewBitmap.width, easterEggViewBitmap.height, Bitmap.Config.RGB_565)
             canvas.drawBitmap(easterEggViewBitmap, null, boundingRect, null)
             canvas.drawCircle(measuredWidth / 2f, measuredHeight / 2f, 250f, circlePaint)
 
