@@ -18,12 +18,12 @@
 
 package com.therealbluepandabear.pixapencil.fragments.easteregg
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.therealbluepandabear.pixapencil.R
 import com.therealbluepandabear.pixapencil.databinding.FragmentEasterEggBinding
 
@@ -40,16 +40,32 @@ class EasterEggFragment : Fragment() {
         }
     }
 
+    @SuppressLint("RestrictedApi")
+    private fun setup() {
+        Toast.makeText(this.requireContext(), getString(R.string.fragmentEasterEgg_toast_text), Toast.LENGTH_LONG).show()
+
+        val supportActionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        supportActionBar?.setShowHideAnimationEnabled(false)
+        supportActionBar?.hide()
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+    }
+
+    private fun onExit() {
+        (requireActivity() as AppCompatActivity).supportActionBar?.show()
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentEasterEggBinding.inflate(inflater, container, false)
 
-        Toast.makeText(this.requireContext(), getString(R.string.fragmentEasterEgg_toast_text), Toast.LENGTH_LONG).show()
+        setup()
 
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        onExit()
         _binding = null
     }
 }
