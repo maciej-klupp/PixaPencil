@@ -26,6 +26,9 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.therealbluepandabear.pixapencil.R
+import com.therealbluepandabear.pixapencil.extensions.createMutableClone
+import com.therealbluepandabear.pixapencil.extensions.setPixel
+import com.therealbluepandabear.pixapencil.models.Coordinates
 import kotlin.random.Random
 
 class EasterEggView @JvmOverloads constructor(
@@ -35,13 +38,9 @@ class EasterEggView @JvmOverloads constructor(
     private lateinit var boundingRect: Rect
 
     private var pixelsArr = IntArray(0)
-    private var hsvArr = FloatArray(3)
 
     private var hue = Random.nextInt(0, 361)
 
-    private val handlerRunnable = Runnable {
-        invalidate()
-    }
     private val circlePaint = Paint()
     private val textPaint = Paint()
     private val bitmapRatio = 70
@@ -77,10 +76,30 @@ class EasterEggView @JvmOverloads constructor(
         canvas.drawText("0.2", x.toFloat(), y, textPaint)
     }
 
+    private fun drawDiagonalLine(from: Coordinates, bitmap: Bitmap) {
+        for (i in 0 until easterEggViewBitmap.width) {
+            if (from.x + i < easterEggViewBitmap.width && from.y + i < easterEggViewBitmap.height) {
+                bitmap.setPixel(Coordinates(from.x + i, from.y + i), Color.HSVToColor(floatArrayOf(hue.toFloat(), 1f, 1f)))
+            }
+        }
+    }
+
+    private fun drawDiagonalLines(bitmap: Bitmap) {
+        for (i in 0 until bitmap.height) {
+            if (i % 3 == 0) {
+                drawDiagonalLine(Coordinates(0, i), bitmap)
+            }
+        }
+
+        for (i in 0 until bitmap.width) {
+            if (i % 3 == 0) {
+                drawDiagonalLine(Coordinates(i, 0), bitmap)
+            }
+        }
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-
-        handler.removeCallbacks(handlerRunnable)
 
         if (::easterEggViewBitmap.isInitialized) {
             easterEggViewBitmap.recycle()
@@ -99,9 +118,6 @@ class EasterEggView @JvmOverloads constructor(
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
-            performClick()
-            handler.removeCallbacks(handlerRunnable)
-
             randomizeHue()
             initCirclePaint()
             invalidate()
@@ -112,21 +128,19 @@ class EasterEggView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         if (::easterEggViewBitmap.isInitialized) {
-            easterEggViewBitmap.getPixels(pixelsArr, 0, easterEggViewBitmap.width, 0, 0, easterEggViewBitmap.width, easterEggViewBitmap.height)
 
-            for (i in pixelsArr.indices) {
-                hsvArr[0] = hue.toFloat()
-                hsvArr[1] = 1f
-                hsvArr[2] = Random.nextInt(65, 101).toFloat() / 100f
-                pixelsArr[i] = Color.HSVToColor(hsvArr)
-            }
-
-            easterEggViewBitmap = Bitmap.createBitmap(pixelsArr, easterEggViewBitmap.width, easterEggViewBitmap.height, Bitmap.Config.RGB_565)
+            easterEggViewBitmap.eraseColor(Color.HSVToColor(floatArrayOf(hue.toFloat(), 1f, 70f / 100)))
             canvas.drawBitmap(easterEggViewBitmap, null, boundingRect, null)
+
+            val mutableClone = easterEggViewBitmap.createMutableClone()
+
+            drawDiagonalLines(mutableClone)
+
+            canvas.drawBitmap(easterEggViewBitmap, null, boundingRect, null)
+            canvas.drawBitmap(mutableClone, null, boundingRect, null)
             canvas.drawCircle(measuredWidth / 2f, measuredHeight / 2f, 250f, circlePaint)
 
             drawText(canvas)
-            handler.postDelayed(handlerRunnable, 2500)
         }
     }
 }
