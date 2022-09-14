@@ -54,6 +54,7 @@ class EasterEggView @JvmOverloads constructor(
     }
 
     private fun initCirclePaint() {
+        circlePaint.setShadowLayer(70f,0f, 0f, Color.argb(100, 0, 0, 0))
         circlePaint.color = Color.HSVToColor(floatArrayOf(hue.toFloat(), 1f, 1f))
         circlePaint.style = Paint.Style.FILL
     }
