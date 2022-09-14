@@ -83,7 +83,7 @@ class EasterEggView @JvmOverloads constructor(
     }
 
     private val versionTextAnimation: ValueAnimator = ValueAnimator.ofInt(0, 180).apply {
-        duration = 780
+        duration = 700
         interpolator = DecelerateInterpolator()
 
         addUpdateListener { valueAnimator ->
