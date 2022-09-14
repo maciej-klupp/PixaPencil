@@ -28,6 +28,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import androidx.core.content.res.ResourcesCompat
 import com.therealbluepandabear.pixapencil.R
 import com.therealbluepandabear.pixapencil.extensions.createMutableClone
@@ -68,6 +69,30 @@ class EasterEggView @JvmOverloads constructor(
         })
     }
 
+    private var radius = 0
+    private var textSize = 0
+
+    private val circleAnimation: ValueAnimator = ValueAnimator.ofInt(0, 250).apply {
+        duration = 700
+        interpolator = DecelerateInterpolator()
+
+        addUpdateListener { valueAnimator ->
+            radius = valueAnimator.animatedValue as Int
+            invalidate()
+        }
+    }
+
+    private val versionTextAnimation: ValueAnimator = ValueAnimator.ofInt(0, 180).apply {
+        duration = 780
+        interpolator = DecelerateInterpolator()
+
+        addUpdateListener { valueAnimator ->
+            textSize = valueAnimator.animatedValue as Int
+            initTextPaint()
+            invalidate()
+        }
+    }
+
     private fun getBitmapDimens(): Pair<Int, Int> {
         return Pair(measuredWidth / bitmapRatio, measuredHeight / bitmapRatio)
     }
@@ -80,7 +105,7 @@ class EasterEggView @JvmOverloads constructor(
 
     private fun initTextPaint() {
         textPaint.textAlign = Paint.Align.CENTER
-        textPaint.textSize = 180f
+        textPaint.textSize = textSize.toFloat()
         textPaint.color = Color.WHITE
         textPaint.typeface = ResourcesCompat.getFont(this.context, R.font.manrope_medium)
     }
@@ -121,6 +146,8 @@ class EasterEggView @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
+        hueAnimation.cancel()
+
         if (::easterEggViewBitmap.isInitialized) {
             easterEggViewBitmap.recycle()
         }
@@ -134,6 +161,8 @@ class EasterEggView @JvmOverloads constructor(
         initTextPaint()
 
         hueAnimation.start()
+        circleAnimation.start()
+        versionTextAnimation.start()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -163,7 +192,7 @@ class EasterEggView @JvmOverloads constructor(
 
             canvas.drawBitmap(easterEggViewBitmap, null, boundingRect, null)
             canvas.drawBitmap(mutableClone, null, boundingRect, null)
-            canvas.drawCircle(measuredWidth / 2f, measuredHeight / 2f, 250f, circlePaint)
+            canvas.drawCircle(measuredWidth / 2f, measuredHeight / 2f, radius.toFloat(), circlePaint)
 
             drawText(canvas)
         }
