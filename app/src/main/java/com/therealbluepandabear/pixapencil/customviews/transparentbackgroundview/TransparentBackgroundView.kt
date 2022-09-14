@@ -31,7 +31,6 @@ import com.therealbluepandabear.pixapencil.utility.constants.IntConstants
 /** This view is crucial in giving the user the indication that the bitmap is transparent -- not white.
  * We do this by simply drawing a checkerboard pattern */
 class TransparentBackgroundView(context: Context, attributeSet: AttributeSet): View(context, attributeSet) {
-    private lateinit var transparentBackgroundViewCanvas: Canvas
     lateinit var transparentBackgroundViewBitmap: Bitmap
 
     private var bitmapWidth: Int = IntConstants.DEFAULT_CANVAS_WIDTH_HEIGHT
@@ -76,8 +75,6 @@ class TransparentBackgroundView(context: Context, attributeSet: AttributeSet): V
         }
 
         transparentBackgroundViewBitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888)
-        transparentBackgroundViewCanvas = Canvas(transparentBackgroundViewBitmap)
-
         transparentBackgroundViewBitmap.drawTransparent()
     }
 
