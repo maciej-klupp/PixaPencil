@@ -37,17 +37,11 @@ class EasterEggView @JvmOverloads constructor(
     private lateinit var easterEggViewBitmap: Bitmap
     private lateinit var boundingRect: Rect
 
-    private var pixelsArr = IntArray(0)
-
     private var hue = Random.nextInt(0, 361)
 
     private val circlePaint = Paint()
     private val textPaint = Paint()
     private val bitmapRatio = 70
-
-    private fun initPixelsArr() {
-        pixelsArr = IntArray(easterEggViewBitmap.width * easterEggViewBitmap.height)
-    }
 
     private fun getBitmapDimens(): Pair<Int, Int> {
         return Pair(measuredWidth / bitmapRatio, measuredHeight / bitmapRatio)
@@ -111,7 +105,6 @@ class EasterEggView @JvmOverloads constructor(
         easterEggViewBitmap = Bitmap.createBitmap(dimensions.first, dimensions.second, Bitmap.Config.RGB_565)
         boundingRect = Rect(0, 0, measuredWidth, measuredHeight)
 
-        initPixelsArr()
         initCirclePaint()
         initTextPaint()
     }
