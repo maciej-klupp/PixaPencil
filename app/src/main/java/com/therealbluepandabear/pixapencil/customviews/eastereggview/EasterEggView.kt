@@ -18,12 +18,16 @@
 
 package com.therealbluepandabear.pixapencil.customviews.eastereggview
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.res.ResourcesCompat
 import com.therealbluepandabear.pixapencil.R
 import com.therealbluepandabear.pixapencil.extensions.createMutableClone
@@ -42,6 +46,27 @@ class EasterEggView @JvmOverloads constructor(
     private val circlePaint = Paint()
     private val textPaint = Paint()
     private val bitmapRatio = 70
+
+    private val maxAnimationTime = 100000f
+
+    private val hueAnimation: ValueAnimator = ValueAnimator.ofInt(hue, 360).apply {
+        duration = (maxAnimationTime * ((360f - hue.toFloat()) / 360f)).toLong()
+        interpolator = AccelerateDecelerateInterpolator()
+        addUpdateListener { valueAnimator ->
+            hue = valueAnimator.animatedValue as Int
+
+            initCirclePaint()
+            invalidate()
+        }
+
+        addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                this@apply.setIntValues(0, 360)
+                this@apply.duration = maxAnimationTime.toLong()
+                this@apply.start()
+            }
+        })
+    }
 
     private fun getBitmapDimens(): Pair<Int, Int> {
         return Pair(measuredWidth / bitmapRatio, measuredHeight / bitmapRatio)
@@ -107,13 +132,19 @@ class EasterEggView @JvmOverloads constructor(
 
         initCirclePaint()
         initTextPaint()
+
+        hueAnimation.start()
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
+            hueAnimation.cancel()
             randomizeHue()
             initCirclePaint()
+            hueAnimation.setIntValues(hue, 360)
+            hueAnimation.duration = (maxAnimationTime * ((360f - hue.toFloat()) / 360f)).toLong()
+            hueAnimation.start()
             invalidate()
         }
 
