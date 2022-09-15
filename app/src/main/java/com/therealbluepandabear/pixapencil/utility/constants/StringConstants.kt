@@ -66,6 +66,7 @@ object StringConstants {
         const val SHARED_PREFERENCE_SHOW_SPRAY_TOOLTIP_IDENTIFIER = "show_spray_tooltip_shared_pref"
         const val SHARED_PREFERENCE_SHOW_SHADING_TOOLTIP_IDENTIFIER = "show_shading_tooltip_shared_pref"
         const val SHARED_PREFERENCE_SHOW_DITHER_TOOLTIP_IDENTIFIER = "show_dither_tooltip_shared_pref"
+        const val SHARED_PREFERENCE_SHOW_EASTER_EGG_TOAST_IDENTIFIER = "show_easter_egg_toast_shared_pref"
 
         const val PREV_COLOR_PICKER_TAB_BUNDLE_IDENTIFIER = "prev_color_picker_tab_bundle_identifier"
         const val PREV_COLORS_TO_FIND_BUNDLE_IDENTIFIER = "prev_colors_to_find_bundle_identifier"

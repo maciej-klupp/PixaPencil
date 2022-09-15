@@ -25,10 +25,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.therealbluepandabear.pixapencil.R
+import com.therealbluepandabear.pixapencil.activities.main.MainActivity
 import com.therealbluepandabear.pixapencil.databinding.FragmentEasterEggBinding
+import com.therealbluepandabear.pixapencil.utility.constants.StringConstants
 
 class EasterEggFragment : Fragment() {
     private var _binding: FragmentEasterEggBinding? = null
+    private var showToast: Boolean = true
 
     val binding get(): FragmentEasterEggBinding {
         return _binding!!
@@ -40,14 +43,37 @@ class EasterEggFragment : Fragment() {
         }
     }
 
-    @SuppressLint("RestrictedApi")
-    private fun setup() {
-        Toast.makeText(this.requireContext(), getString(R.string.fragmentEasterEgg_toast_text), Toast.LENGTH_LONG).show()
+    private fun showToastIfApplicable() {
+        if (requireActivity() is MainActivity) {
+            val sharedPreferenceObject = (requireActivity() as MainActivity).sharedPreferenceObject
 
+            if (sharedPreferenceObject.contains(StringConstants.Identifiers.SHARED_PREFERENCE_SHOW_EASTER_EGG_TOAST_IDENTIFIER)) {
+                showToast = sharedPreferenceObject.getBoolean(StringConstants.Identifiers.SHARED_PREFERENCE_SHOW_EASTER_EGG_TOAST_IDENTIFIER, showToast)
+            } else {
+                with (sharedPreferenceObject.edit()) {
+                    putBoolean(StringConstants.Identifiers.SHARED_PREFERENCE_SHOW_EASTER_EGG_TOAST_IDENTIFIER, false)
+                    apply()
+                }
+            }
+        }
+
+        if (showToast) {
+            Toast.makeText(this.requireContext(), getString(R.string.fragmentEasterEgg_toast_text), Toast.LENGTH_LONG).show()
+            enterFullscreenMode()
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun enterFullscreenMode() {
         val supportActionBar = (requireActivity() as AppCompatActivity).supportActionBar
         supportActionBar?.setShowHideAnimationEnabled(false)
         supportActionBar?.hide()
         requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+    }
+
+    private fun setup() {
+        showToastIfApplicable()
+        enterFullscreenMode()
     }
 
     private fun onExit() {
