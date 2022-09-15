@@ -143,10 +143,18 @@ class EasterEggView @JvmOverloads constructor(
         }
     }
 
+    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+        super.onWindowFocusChanged(hasWindowFocus)
+
+        if (!hasWindowFocus && hueAnimation.isRunning) {
+            hueAnimation.pause()
+        } else if (hasWindowFocus && hueAnimation.isPaused) {
+            hueAnimation.resume()
+        }
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-
-        hueAnimation.cancel()
 
         if (::easterEggViewBitmap.isInitialized) {
             easterEggViewBitmap.recycle()
