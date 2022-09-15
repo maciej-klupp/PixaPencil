@@ -74,7 +74,7 @@ class TransparentBackgroundView(context: Context, attributeSet: AttributeSet): V
             transparentBackgroundViewBitmap.recycle()
         }
 
-        transparentBackgroundViewBitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888)
+        transparentBackgroundViewBitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.RGB_565)
         transparentBackgroundViewBitmap.drawTransparent()
     }
 
