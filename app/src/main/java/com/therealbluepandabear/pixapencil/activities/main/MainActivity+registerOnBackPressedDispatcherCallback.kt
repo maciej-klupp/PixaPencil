@@ -20,13 +20,18 @@ package com.therealbluepandabear.pixapencil.activities.main
 
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import com.therealbluepandabear.pixapencil.fragments.appinfo.AppInfoFragment
 
 fun MainActivity.registerOnBackPressedDispatcherCallback() {
     onBackPressedDispatcher.addCallback(
         this,
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (supportFragmentManager.backStackEntryCount > 0) {
+                val fragmentManager = supportFragmentManager.fragments.find { it is AppInfoFragment }
+
+                if (fragmentManager != null && fragmentManager.childFragmentManager.backStackEntryCount > 0) {
+                    fragmentManager.childFragmentManager.popBackStackImmediate()
+                } else if (supportFragmentManager.backStackEntryCount > 0) {
                     // If we remove this, when the user would press the back button the bottom navigation view will disappear
                     binding.activityMainBottomNavigationView.visibility = View.VISIBLE
 
