@@ -46,7 +46,7 @@ class EasterEggView @JvmOverloads constructor(
 
     private val circlePaint = Paint()
     private val textPaint = Paint()
-    private val bitmapRatio = 70
+    private val bitmapRatio = 65
 
     private val maxAnimationTime = 100000f
 
