@@ -45,7 +45,7 @@ class AppInfoFragment : Fragment() {
     private var logoTapCount = 0
     private var timerRunning = false
 
-    private val easterEggTimerTask = object : CountDownTimer(2000, 1000) {
+    private val easterEggTimerTask = object : CountDownTimer(1300, 1000) {
         override fun onTick(millisUntilFinished: Long) {
             timerRunning = true
         }
